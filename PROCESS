@@ -89,40 +89,38 @@ systemctl restart docker.service
 
 5. WRITE COMPOSE FILE AND PUSH TO GITHUB
 
-version: '3'
+version: '3.8'
 services:
-  devops:
-    image: rahamshaik/devopsreponit:latest
-    ports:
-      - "80:80"
-    volumes:
-      - "devopsvol"
-    deploy:
-      replicas: 3
-
-  aws:
-    image: rahamshaik/awsreponit:latest
+  movies:
+    image: akashkanaparthi/paytmmovies:latest
     ports:
       - "81:80"
-    volumes:
-      - "awsvol"
     deploy:
       replicas: 3
-
-  datascience:
-    image: rahamshaik/datasciencereponit:latest
+  train:
+    image: akashkanaparthi/paytmtrain:latest
     ports:
       - "82:80"
-    volumes:
-      - "datasciencevol"
+    deploy:
+      replicas: 3
+  dth:
+    image: akashkanaparthi/paytmdth:latest
+    ports:
+      - "83:80"
+    deploy:
+      replicas: 3
+  recharge:
+    image: hpakala53/paytmrecharge:latest
+    ports:
+      - "84:80"
     deploy:
       replicas: 3
 
-  azure:
-    image: rahamshaik/azurereponit:latest
-    ports:
-      - "83:80"
-    volumes:
-      - "azurevol"
-    deploy:
-      replicas: 3
+
+6. DEPLOY
+
+stage('deploy') {
+    steps {
+        sh 'docker stack deploy -c docker-compose.yml paytm'
+    }
+}
